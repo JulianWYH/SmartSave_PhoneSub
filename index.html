@@ -265,80 +265,20 @@
 
   <!-- Botpress Initialization -->
   <script>
-    let isBotReady = false;
-    
-    // Function to send message to chatbot
-    function sendMessageToBot(message) {
-      console.log('Attempting to send message:', message);
-      
-      if (!isBotReady) {
-        console.warn('Bot not ready yet, storing message');
-        window.pendingMessage = message;
-        return;
-      }
-      
-      // Method 1: Try using Botpress sendPayload
-      if (window.botpress && window.botpress.sendPayload) {
-        try {
-          window.botpress.sendPayload({
-            type: 'text',
-            text: message
-          });
-          console.log('Message sent via sendPayload');
-          return;
-        } catch (error) {
-          console.error('sendPayload failed:', error);
-        }
-      }
-      
-      // Method 2: Try using Botpress sendEvent
-      if (window.botpress && window.botpress.sendEvent) {
-        try {
-          window.botpress.sendEvent({
-            type: 'text',
-            payload: { text: message }
-          });
-          console.log('Message sent via sendEvent');
-          return;
-        } catch (error) {
-          console.error('sendEvent failed:', error);
-        }
-      }
-      
-      // Method 3: Fallback - try to find and populate the input field
-      setTimeout(() => {
-        const chatInput = document.querySelector('#webchat input[type="text"], #webchat textarea, #webchat [contenteditable="true"]');
-        if (chatInput) {
-          console.log('Found chat input, populating manually');
-          if (chatInput.tagName === 'INPUT' || chatInput.tagName === 'TEXTAREA') {
-            chatInput.value = message;
-          } else {
-            chatInput.textContent = message;
-          }
-          chatInput.focus();
-          
-          // Try to trigger send button
-          const sendButton = document.querySelector('#webchat button[type="submit"], #webchat button[aria-label*="send"], #webchat button[title*="send"]');
-          if (sendButton) {
-            sendButton.click();
-          } else {
-            // Try Enter key
-            chatInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' }));
-          }
-        } else {
-          console.error('Could not find chat input field');
-          alert('Chat not ready yet. Please wait and try again.');
-        }
-      }, 500);
+  window.addEventListener('load', function () {
+    if (!window.botpress) {
+      console.error('❌ Botpress not loaded. Check CDN or internet.');
+      return;
     }
+
+    let isBotReady = false;
 
     window.botpress.on("webchat:ready", () => {
       console.log("✅ Botpress chat ready");
       isBotReady = true;
       document.getElementById("chat-loading").style.display = "none";
       window.botpress.open();
-      
-      // Send any pending message
+
       if (window.pendingMessage) {
         console.log('Sending pending message:', window.pendingMessage);
         setTimeout(() => {
@@ -347,12 +287,11 @@
         }, 1500);
       }
     });
-    
-    // Add error handling
+
     window.botpress.on("webchat:error", (error) => {
       console.error("❌ Botpress error:", error);
     });
-    
+
     window.botpress.init({
       "botId": "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
       "configuration": {
@@ -379,18 +318,22 @@
       "clientId": "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
       "selector": "#webchat"
     });
-    
-    // Debug: Add click handler to check if buttons work
-    document.addEventListener('DOMContentLoaded', function() {
-      const buttons = document.querySelectorAll('.question-tag');
-      buttons.forEach(button => {
-        button.addEventListener('click', function() {
-          console.log('Button clicked:', this.textContent);
-        });
+
+    // Optional: Button click handlers
+    const buttons = document.querySelectorAll('.question-tag');
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        if (isBotReady) {
+          window.botpress.sendPayload({
+            type: 'text',
+            text: this.textContent
+          });
+        } else {
+          window.pendingMessage = this.textContent;
+        }
       });
     });
-  </script>
-</body>
-</html>
 
-
+    // Optional: fallback method (your sendMessageToBot function)
+  });
+</script>
