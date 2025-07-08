@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Phone Plan AI Assistant</title>
 
   <!-- Botpress Webchat -->
@@ -15,19 +15,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <style>
+    /* [Your styling is kept as-is for layout, appearance, responsiveness] */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Inter', sans-serif;
       background: #f7f7f8;
       color: #333;
       min-height: 100vh;
     }
-
     .container {
       max-width: 900px;
       margin: 0 auto;
@@ -36,21 +35,18 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     header {
       text-align: center;
       margin-bottom: 20px;
       padding: 20px 0;
       border-bottom: 1px solid #e5e5e5;
     }
-
     .logo {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 15px;
     }
-
     .logo i {
       font-size: 2rem;
       color: #5eb1ef;
@@ -58,78 +54,41 @@
       padding: 12px;
       border-radius: 12px;
     }
-
     h1 {
       font-size: 2rem;
       color: #2d3748;
       font-weight: 600;
     }
-
     .subtitle {
       font-size: 1rem;
       color: #718096;
     }
-
     .main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
-
-    .intro-section, .chatbot-section {
+    .intro-section,
+    .chatbot-section {
       background: white;
       border-radius: 12px;
       padding: 24px;
       border: 1px solid #e5e5e5;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-
     .intro-section h2 {
       font-size: 1.3rem;
       margin-bottom: 12px;
       font-weight: 600;
       color: #2d3748;
     }
-
     .intro-section p {
       font-size: 0.95rem;
       line-height: 1.6;
       color: #4a5568;
       margin-bottom: 16px;
     }
-
-    .quick-questions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .question-tag {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-      color: #4a5568;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
-      outline: none;
-    }
-
-    .question-tag:hover {
-      background: #5eb1ef;
-      color: white;
-      border-color: #5eb1ef;
-      transform: translateY(-1px);
-    }
-
-    .question-tag:active {
-      transform: translateY(0);
-    }
-
     .chatbot-header h2 {
       font-size: 1.2rem;
       font-weight: 600;
@@ -138,17 +97,14 @@
       gap: 8px;
       color: #2d3748;
     }
-
     .chatbot-header i {
       color: #5eb1ef;
     }
-
     .chatbot-description {
       font-size: 0.9rem;
       color: #718096;
       margin-bottom: 16px;
     }
-
     #webchat {
       width: 100% !important;
       height: 600px !important;
@@ -156,8 +112,6 @@
       overflow: hidden;
       border: 1px solid #e2e8f0;
     }
-
-    /* Botpress Webchat Styling */
     #webchat .bpWebchat {
       position: unset;
       width: 100%;
@@ -165,11 +119,9 @@
       max-height: 100%;
       max-width: 100%;
     }
-
     #webchat .bpFab {
       display: none;
     }
-
     .status-indicator {
       display: inline-flex;
       align-items: center;
@@ -178,7 +130,6 @@
       font-size: 0.85rem;
       margin-bottom: 8px;
     }
-
     .status-dot {
       width: 8px;
       height: 8px;
@@ -186,28 +137,18 @@
       border-radius: 50%;
       animation: pulse 2s infinite;
     }
-
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-
-
     @media (max-width: 768px) {
       .container { padding: 15px; }
       h1 { font-size: 1.8rem; }
       #webchat { height: 500px !important; }
-      .quick-questions { flex-direction: column; }
-      .question-tag { text-align: center; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <header>
@@ -236,49 +177,32 @@
           <p class="chatbot-description">Start a conversation below to get personalized phone plan recommendations.</p>
         </div>
 
-
-
         <div id="webchat"></div>
       </div>
     </div>
   </div>
 
   <!-- Botpress Initialization -->
-<script>
-  window.addEventListener('load', function () {
-    const interval = setInterval(() => {
-      if (window.botpress) {
-        clearInterval(interval);
+  <script>
+    window.addEventListener('load', function () {
+      const interval = setInterval(() => {
+        if (window.botpress) {
+          clearInterval(interval);
 
-        // Ready event
-        window.botpress.on("webchat:ready", () => {
-          console.log("✅ Botpress chat ready");
-          window.botpress.open();
-        });
+          window.botpress.init({
+            botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
+            clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
+            selector: "#webchat",
+            configUrl: "https://files.bpcontent.cloud/2025/05/19/08/20250519084106-C8WPIPB9.json"
+          });
 
-        // Init
-        window.botpress.init({
-          botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
-          clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
-          selector: "#webchat",
-          configuration: {
-            version: "v1",
-            composerPlaceholder: "Press to start...",
-            botName: "Phone Subscription Bot",
-            botAvatar: "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
-            botDescription: "Enquiries for phone subscriptions",
-            fabImage: "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
-            color: "#347cc4",
-            variant: "soft",
-            headerVariant: "solid",
-            themeMode: "light",
-            fontFamily: "inter",
-            radius: 1,
-            feedbackEnabled: true,
-            footer: "[⚡ by Botpress](https://botpress.com/?from=webchat)"
-          }
-        });
-      }
-    }, 50); // Check every 50ms
-  });
-</script>
+          window.botpress.on("webchat:ready", () => {
+            console.log("✅ Botpress chat ready");
+            window.botpress.open();
+          });
+        }
+      }, 50);
+    });
+  </script>
+</body>
+</html>
