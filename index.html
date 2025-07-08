@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; img-src 'self' https: data: blob:; font-src 'self' https: data:;">
+  <meta name="referrer" content="no-referrer-when-downgrade">
   <title>Phone Plan AI Assistant</title>
 
   <!-- Botpress Webchat -->
-  <script src="https://cdn.botpress.cloud/webchat/v3.0/inject.js"></script>
+  <script src="https://cdn.botpress.cloud/webchat/v3.0/inject.js" crossorigin="anonymous"></script>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -265,123 +267,152 @@
 
   <!-- Botpress Initialization -->
   <script>
-    let isBotReady = false;
-    
-    // Function to send message to chatbot
-    function sendMessageToBot(message) {
-      console.log('Attempting to send message:', message);
-      
-      if (!isBotReady) {
-        console.warn('Bot not ready yet, storing message');
-        window.pendingMessage = message;
-        return;
-      }
-      
-      // Method 1: Try using Botpress sendPayload
-      if (window.botpress && window.botpress.sendPayload) {
-        try {
-          window.botpress.sendPayload({
-            type: 'text',
-            text: message
-          });
-          console.log('Message sent via sendPayload');
-          return;
-        } catch (error) {
-          console.error('sendPayload failed:', error);
-        }
-      }
-      
-      // Method 2: Try using Botpress sendEvent
-      if (window.botpress && window.botpress.sendEvent) {
-        try {
-          window.botpress.sendEvent({
-            type: 'text',
-            payload: { text: message }
-          });
-          console.log('Message sent via sendEvent');
-          return;
-        } catch (error) {
-          console.error('sendEvent failed:', error);
-        }
-      }
-      
-      // Method 3: Fallback - try to find and populate the input field
-      setTimeout(() => {
-        const chatInput = document.querySelector('#webchat input[type="text"], #webchat textarea, #webchat [contenteditable="true"]');
-        if (chatInput) {
-          console.log('Found chat input, populating manually');
-          if (chatInput.tagName === 'INPUT' || chatInput.tagName === 'TEXTAREA') {
-            chatInput.value = message;
-          } else {
-            chatInput.textContent = message;
-          }
-          chatInput.focus();
-          
-          // Try to trigger send button
-          const sendButton = document.querySelector('#webchat button[type="submit"], #webchat button[aria-label*="send"], #webchat button[title*="send"]');
-          if (sendButton) {
-            sendButton.click();
-          } else {
-            // Try Enter key
-            chatInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' }));
-          }
-        } else {
-          console.error('Could not find chat input field');
-          alert('Chat not ready yet. Please wait and try again.');
-        }
-      }, 500);
-    }
-
-    window.botpress.on("webchat:ready", () => {
-      console.log("✅ Botpress chat ready");
-      isBotReady = true;
-      document.getElementById("chat-loading").style.display = "none";
-      window.botpress.open();
-      
-      // Send any pending message
-      if (window.pendingMessage) {
-        console.log('Sending pending message:', window.pendingMessage);
-        setTimeout(() => {
-          sendMessageToBot(window.pendingMessage);
-          window.pendingMessage = null;
-        }, 1500);
-      }
-    });
-    
-    // Add error handling
-    window.botpress.on("webchat:error", (error) => {
-      console.error("❌ Botpress error:", error);
-    });
-    
-    window.botpress.init({
-      "botId": "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
-      "configuration": {
-        "version": "v1",
-        "composerPlaceholder": "Type your question here...",
-        "botName": "Phone Subscription Bot",
-        "botAvatar": "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
-        "botDescription": "Enquiries for phone subscriptions",
-        "fabImage": "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
-        "website": {},
-        "email": {},
-        "phone": {},
-        "termsOfService": {},
-        "privacyPolicy": {},
-        "color": "#347cc4",
-        "variant": "soft",
-        "headerVariant": "solid",
-        "themeMode": "light",
-        "fontFamily": "inter",
-        "radius": 1,
-        "feedbackEnabled": true,
-        "footer": "[⚡ by Botpress](https://botpress.com/?from=webchat)"
-      },
-      "clientId": "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
-      "selector": "#webchat"
-    });
-    
-    // Debug: Add click handler to check if buttons work
+    // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM loaded, initializing Botpress...');
+      
+      // Check if we're on GitHub Pages
+      const isGitHubPages = window.location.hostname.includes('github.io');
+      console.log('Is GitHub Pages:', isGitHubPages);
+      
+      let isBotReady = false;
+      
+      // Function to send message to chatbot
+      function sendMessageToBot(message) {
+        console.log('Attempting to send message:', message);
+        
+        if (!isBotReady) {
+          console.warn('Bot not ready yet, storing message');
+          window.pendingMessage = message;
+          return;
+        }
+        
+        // Method 1: Try using Botpress sendPayload
+        if (window.botpress && window.botpress.sendPayload) {
+          try {
+            window.botpress.sendPayload({
+              type: 'text',
+              text: message
+            });
+            console.log('Message sent via sendPayload');
+            return;
+          } catch (error) {
+            console.error('sendPayload failed:', error);
+          }
+        }
+        
+        // Method 2: Try using Botpress sendEvent
+        if (window.botpress && window.botpress.sendEvent) {
+          try {
+            window.botpress.sendEvent({
+              type: 'text',
+              payload: { text: message }
+            });
+            console.log('Message sent via sendEvent');
+            return;
+          } catch (error) {
+            console.error('sendEvent failed:', error);
+          }
+        }
+        
+        // Method 3: Fallback - try to find and populate the input field
+        setTimeout(() => {
+          const chatInput = document.querySelector('#webchat input[type="text"], #webchat textarea, #webchat [contenteditable="true"]');
+          if (chatInput) {
+            console.log('Found chat input, populating manually');
+            if (chatInput.tagName === 'INPUT' || chatInput.tagName === 'TEXTAREA') {
+              chatInput.value = message;
+            } else {
+              chatInput.textContent = message;
+            }
+            chatInput.focus();
+            
+            // Try to trigger send button
+            const sendButton = document.querySelector('#webchat button[type="submit"], #webchat button[aria-label*="send"], #webchat button[title*="send"]');
+            if (sendButton) {
+              sendButton.click();
+            } else {
+              // Try Enter key
+              chatInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' }));
+            }
+          } else {
+            console.error('Could not find chat input field');
+            alert('Chat not ready yet. Please wait and try again.');
+          }
+        }, 500);
+      }
+
+      // Initialize Botpress with error handling
+      try {
+        if (typeof window.botpress === 'undefined') {
+          console.error('Botpress not loaded');
+          document.getElementById("chat-loading").innerHTML = '<p style="color: red;">❌ Chat service unavailable. Please try refreshing the page.</p>';
+          return;
+        }
+
+        window.botpress.on("webchat:ready", () => {
+          console.log("✅ Botpress chat ready");
+          isBotReady = true;
+          document.getElementById("chat-loading").style.display = "none";
+          window.botpress.open();
+          
+          // Send any pending message
+          if (window.pendingMessage) {
+            console.log('Sending pending message:', window.pendingMessage);
+            setTimeout(() => {
+              sendMessageToBot(window.pendingMessage);
+              window.pendingMessage = null;
+            }, 1500);
+          }
+        });
+        
+        // Add error handling
+        window.botpress.on("webchat:error", (error) => {
+          console.error("❌ Botpress error:", error);
+          document.getElementById("chat-loading").innerHTML = '<p style="color: red;">❌ Chat initialization failed. Please refresh the page.</p>';
+        });
+        
+        // Add timeout fallback
+        setTimeout(() => {
+          if (!isBotReady) {
+            console.warn('Botpress taking too long to load, showing fallback');
+            document.getElementById("chat-loading").innerHTML = '<p style="color: orange;">⚠️ Chat is taking longer than expected to load. Please refresh the page or try again later.</p>';
+          }
+        }, 10000); // 10 second timeout
+        
+        window.botpress.init({
+          "botId": "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
+          "configuration": {
+            "version": "v1",
+            "composerPlaceholder": "Type your question here...",
+            "botName": "Phone Subscription Bot",
+            "botAvatar": "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
+            "botDescription": "Enquiries for phone subscriptions",
+            "fabImage": "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
+            "website": {},
+            "email": {},
+            "phone": {},
+            "termsOfService": {},
+            "privacyPolicy": {},
+            "color": "#347cc4",
+            "variant": "soft",
+            "headerVariant": "solid",
+            "themeMode": "light",
+            "fontFamily": "inter",
+            "radius": 1,
+            "feedbackEnabled": true,
+            "footer": "[⚡ by Botpress](https://botpress.com/?from=webchat)"
+          },
+          "clientId": "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
+          "selector": "#webchat"
+        });
+        
+      } catch (error) {
+        console.error('Failed to initialize Botpress:', error);
+        document.getElementById("chat-loading").innerHTML = '<p style="color: red;">❌ Failed to load chat service. Please refresh the page.</p>';
+      }
+      
+      // Debug: Add click handler to check if buttons work
       const buttons = document.querySelectorAll('.question-tag');
       buttons.forEach(button => {
         button.addEventListener('click', function() {
