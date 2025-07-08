@@ -3,38 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Phone Plan AI Assistant</title>
+  <title>SmartSave AI Assistant</title>
 
-  <!-- Botpress Webchat -->
-  <script src="https://cdn.botpress.cloud/webchat/v3.0/inject.js" defer></script>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Botpress Webchat v3 -->
+  <script src="https://cdn.botpress.cloud/webchat/v3/inject.js" defer></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
       font-family: 'Inter', sans-serif;
       background: #f7f7f8;
       color: #333;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
     }
 
     .container {
       max-width: 900px;
       margin: 0 auto;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
 
     header {
@@ -70,158 +56,24 @@
       color: #718096;
     }
 
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .intro-section, .chatbot-section {
+    .intro {
       background: white;
-      border-radius: 12px;
       padding: 24px;
+      border-radius: 12px;
       border: 1px solid #e5e5e5;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
     }
 
-    .intro-section h2 {
+    .intro h2 {
       font-size: 1.3rem;
       margin-bottom: 12px;
-      font-weight: 600;
       color: #2d3748;
     }
 
-    .intro-section p {
+    .intro p {
+      color: #4a5568;
       font-size: 0.95rem;
       line-height: 1.6;
-      color: #4a5568;
-      margin-bottom: 16px;
-    }
-
-    .quick-questions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .question-tag {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-      color: #4a5568;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-family: inherit;
-      outline: none;
-    }
-
-    .question-tag:hover {
-      background: #5eb1ef;
-      color: white;
-      border-color: #5eb1ef;
-      transform: translateY(-1px);
-    }
-
-    .question-tag:active {
-      transform: translateY(0);
-    }
-
-    .chatbot-header h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #2d3748;
-    }
-
-    .chatbot-header i {
-      color: #5eb1ef;
-    }
-
-    .chatbot-description {
-      font-size: 0.9rem;
-      color: #718096;
-      margin-bottom: 16px;
-    }
-
-    #webchat {
-      width: 100% !important;
-      height: 600px !important;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #e2e8f0;
-    }
-
-    /* Botpress Webchat Styling */
-    #webchat .bpWebchat {
-      position: unset;
-      width: 100%;
-      height: 100%;
-      max-height: 100%;
-      max-width: 100%;
-    }
-
-    #webchat .bpFab {
-      display: none;
-    }
-
-    .status-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: #10b981;
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #10b981;
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    #chat-loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100px;
-      flex-direction: column;
-      color: #718096;
-    }
-
-    #chat-loading .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid #e2e8f0;
-      border-top: 3px solid #5eb1ef;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-
-    @media (max-width: 768px) {
-      .container { padding: 15px; }
-      h1 { font-size: 1.8rem; }
-      #webchat { height: 500px !important; }
-      .quick-questions { flex-direction: column; }
-      .question-tag { text-align: center; }
     }
   </style>
 </head>
@@ -231,77 +83,40 @@
       <div class="logo">
         <i class="fas fa-mobile-alt"></i>
         <div>
-          <h1>Phone Plan Assistant</h1>
-          <p class="subtitle">AI-powered budgeting and plan recommendations</p>
+          <h1>SmartSave AI</h1>
+          <p class="subtitle">Your intelligent phone plan assistant</p>
         </div>
       </div>
     </header>
 
-    <div class="main-content">
-      <div class="intro-section">
-        <h2>Welcome to SmartSave AI</h2>
-        <p>Your intelligent phone plan assistant that helps you find the best deals and budgeting options tailored to your needs.</p>
-      </div>
-
-      <div class="chatbot-section">
-        <div class="chatbot-header">
-          <div class="status-indicator">
-            <div class="status-dot"></div>
-            AI Assistant Online
-          </div>
-          <h2><i class="fas fa-comments"></i> Chat with AI Assistant</h2>
-          <p class="chatbot-description">Start a conversation below to get personalized phone plan recommendations.</p>
-        </div>
-
-        <div id="chat-loading">
-          <div class="spinner"></div>
-          <p>Loading AI Assistant...</p>
-        </div>
-
-        <div id="webchat"></div>
-      </div>
+    <div class="intro">
+      <h2>Welcome!</h2>
+      <p>I'm here to help you compare and choose the best phone plan for your needs. Click the chat icon to begin!</p>
     </div>
   </div>
 
-  <!-- Botpress Initialization -->
-<script>
-  window.addEventListener('load', function () {
-    if (!window.botpress) {
-      console.error("❌ Botpress not loaded. Check your script tag or internet connection.");
-      return;
-    }
-
-    // Open automatically when ready
-    window.botpress.on("webchat:ready", () => {
-      console.log("✅ Botpress chat ready");
-      window.botpress.open();
-    });
-
-    window.botpress.init({
-      botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
-      clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
-      selector: "#webchat",
-      configuration: {
-        version: "v1",
-        composerPlaceholder: "Press to start...",
+  <!-- ✅ Botpress Auto-injection Init -->
+  <script>
+    window.addEventListener('load', function () {
+      window.botpressWebChat.init({
+        botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
+        clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
+        hostUrl: "https://cdn.botpress.cloud/webchat/v3",
+        messagingUrl: "https://messaging.botpress.cloud",
+        lazySocket: true,
+        themeName: "prism",
+        stylesheet: "https://cdn.botpress.cloud/webchat/v3/themes/prism.css",
+        composerPlaceholder: "Type your question here...",
         botName: "Phone Subscription Bot",
-        botAvatar: "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
+        avatarUrl: "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
         botDescription: "Enquiries for phone subscriptions",
-        fabImage: "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
-        website: {},
-        email: {},
-        phone: {},
-        termsOfService: {},
-        privacyPolicy: {},
-        color: "#347cc4",
-        variant: "soft",
-        headerVariant: "solid",
-        themeMode: "light",
-        fontFamily: "inter",
-        radius: 1,
-        feedbackEnabled: true,
-        footer: "[⚡ by Botpress](https://botpress.com/?from=webchat)"
-      }
+        useSessionStorage: true,
+        showPoweredBy: true
+      });
     });
-  });
-</script>
+  </script>
+
+  <!-- FontAwesome (icons) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" defer></script>
+</body>
+</html>
