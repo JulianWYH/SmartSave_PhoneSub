@@ -264,76 +264,44 @@
   </div>
 
   <!-- Botpress Initialization -->
-  <script>
+<script>
   window.addEventListener('load', function () {
     if (!window.botpress) {
-      console.error('❌ Botpress not loaded. Check CDN or internet.');
+      console.error("❌ Botpress not loaded. Check your script tag or internet connection.");
       return;
     }
 
-    let isBotReady = false;
-
+    // Open automatically when ready
     window.botpress.on("webchat:ready", () => {
       console.log("✅ Botpress chat ready");
-      isBotReady = true;
-      document.getElementById("chat-loading").style.display = "none";
       window.botpress.open();
-
-      if (window.pendingMessage) {
-        console.log('Sending pending message:', window.pendingMessage);
-        setTimeout(() => {
-          sendMessageToBot(window.pendingMessage);
-          window.pendingMessage = null;
-        }, 1500);
-      }
-    });
-
-    window.botpress.on("webchat:error", (error) => {
-      console.error("❌ Botpress error:", error);
     });
 
     window.botpress.init({
-      "botId": "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
-      "configuration": {
-        "version": "v1",
-        "composerPlaceholder": "Type your question here...",
-        "botName": "Phone Subscription Bot",
-        "botAvatar": "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
-        "botDescription": "Enquiries for phone subscriptions",
-        "fabImage": "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
-        "website": {},
-        "email": {},
-        "phone": {},
-        "termsOfService": {},
-        "privacyPolicy": {},
-        "color": "#347cc4",
-        "variant": "soft",
-        "headerVariant": "solid",
-        "themeMode": "light",
-        "fontFamily": "inter",
-        "radius": 1,
-        "feedbackEnabled": true,
-        "footer": "[⚡ by Botpress](https://botpress.com/?from=webchat)"
-      },
-      "clientId": "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
-      "selector": "#webchat"
+      botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
+      clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
+      selector: "#webchat",
+      configuration: {
+        version: "v1",
+        composerPlaceholder: "Press to start...",
+        botName: "Phone Subscription Bot",
+        botAvatar: "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
+        botDescription: "Enquiries for phone subscriptions",
+        fabImage: "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
+        website: {},
+        email: {},
+        phone: {},
+        termsOfService: {},
+        privacyPolicy: {},
+        color: "#347cc4",
+        variant: "soft",
+        headerVariant: "solid",
+        themeMode: "light",
+        fontFamily: "inter",
+        radius: 1,
+        feedbackEnabled: true,
+        footer: "[⚡ by Botpress](https://botpress.com/?from=webchat)"
+      }
     });
-
-    // Optional: Button click handlers
-    const buttons = document.querySelectorAll('.question-tag');
-    buttons.forEach(button => {
-      button.addEventListener('click', function () {
-        if (isBotReady) {
-          window.botpress.sendPayload({
-            type: 'text',
-            text: this.textContent
-          });
-        } else {
-          window.pendingMessage = this.textContent;
-        }
-      });
-    });
-
-    // Optional: fallback method (your sendMessageToBot function)
   });
 </script>
