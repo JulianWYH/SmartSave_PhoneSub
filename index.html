@@ -1,378 +1,325 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Phone Plan AI Assistant</title>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-    <!-- Botpress Webchat -->
-    <script src="https://cdn.botpress.cloud/webchat/v3.0/inject.js"></script>
-
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background: #f7f7f8;
-        color: #333;
-        min-height: 100vh;
-      }
-
-      /* Navbar Styles */
-      .navbar {
-        background: white;
-        border-bottom: 1px solid #e5e5e5;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-      }
-      .nav-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 64px;
-      }
-      .nav-logo {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #2d3748;
-        text-decoration: none;
-      }
-      .nav-logo:hover {
-        color: #5eb1ef;
-      }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phone Plan AI Assistant</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f7f7f8;
+      color: #333;
+      min-height: 100vh;
+    }
+    /* Navbar Styles */
+    .navbar {
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+      text-decoration: none;
+    }
+    .nav-logo:hover {
+      color: #5eb1ef;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+    }
+    .nav-item {
+      position: relative;
+    }
+    .nav-link {
+      text-decoration: none;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      color: #5eb1ef;
+      background: #f0f8ff;
+    }
+    .nav-link.active {
+      color: #5eb1ef;
+      background: #f0f8ff;
+    }
+    .nav-link.home {
+      color: #e53e3e;
+      background: #fed7d7;
+    }
+    .nav-link.home:hover {
+      color: #c53030;
+      background: #feb2b2;
+    }
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 3px;
+      background: #4a5568;
+      margin: 3px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 64px);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+    .logo i {
+      font-size: 2rem;
+      color: #5eb1ef;
+      background: #f0f8ff;
+      padding: 12px;
+      border-radius: 12px;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #2d3748;
+      font-weight: 600;
+    }
+    .subtitle {
+      font-size: 1rem;
+      color: #718096;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .intro-section,
+    .chatbot-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      border: 1px solid #e5e5e5;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .intro-section h2 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+    .intro-section p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #4a5568;
+      margin-bottom: 16px;
+    }
+    .chatbot-header h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #2d3748;
+    }
+    .chatbot-header i {
+      color: #5eb1ef;
+    }
+    .chatbot-description {
+      font-size: 0.9rem;
+      color: #718096;
+      margin-bottom: 16px;
+    }
+    iframe#botpress-iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
+      background-color: white;
+    }
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #10b981;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
       .nav-menu {
-        display: flex;
-        list-style: none;
-        gap: 32px;
-      }
-      .nav-item {
-        position: relative;
-      }
-      .nav-link {
-        text-decoration: none;
-        color: #4a5568;
-        font-weight: 500;
-        font-size: 0.95rem;
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-      }
-      .nav-link:hover {
-        color: #5eb1ef;
-        background: #f0f8ff;
-      }
-      .nav-link.active {
-        color: #5eb1ef;
-        background: #f0f8ff;
-      }
-      .nav-link.home {
-        color: #e53e3e;
-        background: #fed7d7;
-      }
-      .nav-link.home:hover {
-        color: #c53030;
-        background: #feb2b2;
-      }
-
-      /* Mobile Menu */
-      .mobile-menu-btn {
         display: none;
-        flex-direction: column;
-        cursor: pointer;
-        padding: 8px;
-      }
-      .mobile-menu-btn span {
-        width: 24px;
-        height: 3px;
-        background: #4a5568;
-        margin: 3px 0;
-        border-radius: 2px;
-        transition: 0.3s;
-      }
-
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        min-height: calc(100vh - 64px);
-      }
-      header {
-        text-align: center;
-        margin-bottom: 20px;
-        padding: 20px 0;
-        border-bottom: 1px solid #e5e5e5;
-      }
-      .logo {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
-      }
-      .logo i {
-        font-size: 2rem;
-        color: #5eb1ef;
-        background: #f0f8ff;
-        padding: 12px;
-        border-radius: 12px;
-      }
-      h1 {
-        font-size: 2rem;
-        color: #2d3748;
-        font-weight: 600;
-      }
-      .subtitle {
-        font-size: 1rem;
-        color: #718096;
-      }
-      .main-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-      }
-      .intro-section,
-      .chatbot-section {
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
         background: white;
-        border-radius: 12px;
-        padding: 24px;
-        border: 1px solid #e5e5e5;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
-      .intro-section h2 {
-        font-size: 1.3rem;
-        margin-bottom: 12px;
-        font-weight: 600;
-        color: #2d3748;
-      }
-      .intro-section p {
-        font-size: 0.95rem;
-        line-height: 1.6;
-        color: #4a5568;
-        margin-bottom: 16px;
-      }
-      .chatbot-header h2 {
-        font-size: 1.2rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         gap: 8px;
-        color: #2d3748;
       }
-      .chatbot-header i {
-        color: #5eb1ef;
+      .nav-menu.active {
+        display: flex;
       }
-      .chatbot-description {
-        font-size: 0.9rem;
-        color: #718096;
-        margin-bottom: 16px;
+      .mobile-menu-btn {
+        display: flex;
       }
-      iframe#botpress-iframe {
-        width: 100%;
-        height: 600px;
-        border: none;
-        border-radius: 8px;
-        background-color: white;
+      .container { 
+        padding: 15px; 
       }
-
-      /* Botpress Webchat Styling */
-      #webchat {
-        width: 100% !important;
-        height: 600px !important;
-        border: none;
-        border-radius: 8px;
+      h1 { 
+        font-size: 1.8rem; 
       }
-      #webchat{
-        position: unset;
-        width: 100%;
-        height: 100%;
-        max-height: 100%;
-        max-width: 100%;
+      iframe#botpress-iframe { 
+        height: 500px; 
       }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        📱 Phone Subscription
+      </a>
       
-      .status-indicator {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        color: #10b981;
-        font-size: 0.85rem;
-        margin-bottom: 8px;
-      }
-      .status-dot {
-        width: 8px;
-        height: 8px;
-        background: #10b981;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-      }
-
-      /* Mobile Responsive */
-      @media (max-width: 768px) {
-        .nav-menu {
-          display: none;
-          position: absolute;
-          top: 64px;
-          left: 0;
-          right: 0;
-          background: white;
-          flex-direction: column;
-          padding: 20px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          gap: 8px;
-        }
-        .nav-menu.active {
-          display: flex;
-        }
-        .mobile-menu-btn {
-          display: flex;
-        }
-        .container { 
-          padding: 15px; 
-        }
-        h1 { 
-          font-size: 1.8rem; 
-        }
-        iframe#botpress-iframe { 
-          height: 500px; 
-        }
-        #webchat { 
-          height: 500px !important; 
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-      <div class="nav-container">
-        <a href="#" class="nav-logo">
-          📱 Phone Subscription
-        </a>
-        
-        <ul class="nav-menu" id="nav-menu">
-          <li class="nav-item">
-            <a href="#personal-care" class="nav-link">Personal Care & Shopping</a>
-          </li>
-          <li class="nav-item">
-            <a href="#entertainment" class="nav-link">Entertainment</a>
-          </li>
-          <li class="nav-item">
-            <a href="#food" class="nav-link">Food</a>
-          </li>
-          <li class="nav-item">
-            <a href="#transport" class="nav-link">Transport</a>
-          </li>
-          <li class="nav-item">
-            <a href="https://julianwyh.github.io/SmartSave/" class="nav-link home">🏠 Home</a>
-          </li>
-        </ul>
-
-        <!-- Mobile Menu Button -->
-        <div class="mobile-menu-btn" id="mobile-menu-btn">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      <header>
-        <div class="logo">
-          <i class="fas fa-mobile-alt"></i>
-          <div>
-            <h1>Phone Plan Assistant</h1>
-            <p class="subtitle">AI-powered budgeting and plan recommendations</p>
-          </div>
-        </div>
-      </header>
-
-      <div class="main-content">
-        <div class="intro-section">
-          <h2>Welcome to SmartSave AI</h2>
-          <p>Your intelligent phone plan assistant that helps you find the best deals and budgeting options tailored to your needs.</p>
-        </div>
-
-        <div class="chatbot-section" id="chat">
-          <div class="chatbot-header">
-            <div class="status-indicator">
-              <div class="status-dot"></div>
-              AI Assistant Online
-            </div>
-            <h2><i class="fas fa-comments"></i> Chat with AI Assistant</h2>
-            <p class="chatbot-description">Start a conversation below to get personalized phone plan recommendations.</p>
-          </div>
-
-          <!-- ✅ Botpress webchat embed -->
-          <div id="webchat"></div>
-        </div>
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item">
+          <a href="#personal-care" class="nav-link">Personal Care & Shopping</a>
+        </li>
+        <li class="nav-item">
+          <a href="#entertainment" class="nav-link">Entertainment</a>
+        </li>
+        <li class="nav-item">
+          <a href="#food" class="nav-link">Food</a>
+        </li>
+        <li class="nav-item">
+          <a href="#transport" class="nav-link">Transport</a>
+        </li>
+        <li class="nav-item">
+          <a href="https://julianwyh.github.io/SmartSave/" class="nav-link home">🏠 Home</a>
+        </li>
+      </ul>
+      <!-- Mobile Menu Button -->
+      <div class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
     </div>
-
+  </nav>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-mobile-alt"></i>
+        <div>
+          <h1>Phone Plan Assistant</h1>
+          <p class="subtitle">AI-powered budgeting and plan recommendations</p>
+        </div>
+      </div>
+    </header>
+    <div class="main-content">
+      <div class="intro-section">
+        <h2>Welcome to SmartSave AI</h2>
+        <p>Your intelligent phone plan assistant that helps you find the best deals and budgeting options tailored to your needs.</p>
+      </div>
+      <div class="chatbot-section" id="chat">
+        <div class="chatbot-header">
+          <div class="status-indicator">
+            <div class="status-dot"></div>
+            AI Assistant Online
+          </div>
+          <h2><i class="fas fa-comments"></i> Chat with AI Assistant</h2>
+          <p class="chatbot-description">Start a conversation below to get personalized phone plan recommendations.</p>
+        </div>
+        <!-- ✅ Botpress iframe embed -->
+        <iframe
+          id="botpress-iframe"
+          src="https://cdn.botpress.cloud/webchat/v3.0/shareable.html?configUrl=https://files.bpcontent.cloud/2025/05/19/08/20250519084106-C8WPIPB9.json"
+          allow="clipboard-write"
+        ></iframe>
+      </div>
+    </div>
+  </div>
   <script>
-    window.addEventListener('load', function () {
-      console.log('[Botpress] Page loaded. Waiting for botpress script to be ready...');
-
-      const MAX_ATTEMPTS = 20;
-      let attempt = 0;
-
-      const checkBotpress = setInterval(() => {
-        attempt++;
-        console.log(`[Botpress] Attempt ${attempt}:`, typeof window.botpress, window.botpress);
-
-        if (window.botpress && typeof window.botpress.init === 'function') {
-          clearInterval(checkBotpress);
-          console.log('[Botpress] Found botpress.init(). Initializing bot...');
-
-          window.botpress.init({
-            botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
-            clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
-            selector: "#webchat",
-            configuration: {
-              version: "v1",
-              composerPlaceholder: "Press to start...",
-              botName: "Phone Subscription Bot",
-              botAvatar: "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
-              fabImage: "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
-              themeMode: "light",
-              fontFamily: "inter",
-              radius: 1,
-              feedbackEnabled: true,
-              headerVariant: "solid",
-              variant: "soft",
-              footer: "[⚡ by Botpress](https://botpress.com/?from=webchat)"
-            }
-          });
-
-        } else if (attempt >= MAX_ATTEMPTS) {
-          clearInterval(checkBotpress);
-          console.error('[Botpress] Failed to initialize after 20 attempts. Is the script loaded correctly?');
-        }
-      }, 300);
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      const navMenu = document.getElementById('nav-menu');
+      navMenu.classList.toggle('active');
     });
+    // Active link highlighting
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('[id]');
+      // Set active link based on current page section
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+    
   </script>
-  </body>
-  </html>
+</body>
+</html>
