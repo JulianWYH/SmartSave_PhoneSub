@@ -334,58 +334,47 @@
     </div>
   </div>
 
-  <script>
-    // Mobile menu toggle
-    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-      const navMenu = document.getElementById('nav-menu');
-      navMenu.classList.toggle('active');
-    });
+<script>
+  window.addEventListener('load', function () {
+    console.log('[Botpress] Page loaded. Waiting for botpress script to be ready...');
 
-    // Active link highlighting
-    document.addEventListener('DOMContentLoaded', function() {
-      const navLinks = document.querySelectorAll('.nav-link');
-      const sections = document.querySelectorAll('[id]');
+    const MAX_ATTEMPTS = 20;
+    let attempt = 0;
 
-      // Set active link based on current page section
-      navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          navLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
+    const checkBotpress = setInterval(() => {
+      attempt++;
+      console.log(`[Botpress] Attempt ${attempt}:`, typeof window.botpress, window.botpress);
+
+      if (window.botpress && typeof window.botpress.init === 'function') {
+        clearInterval(checkBotpress);
+        console.log('[Botpress] Found botpress.init(). Initializing bot...');
+
+        window.botpress.init({
+          botId: "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
+          clientId: "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
+          selector: "#webchat",
+          configuration: {
+            version: "v1",
+            composerPlaceholder: "Press to start...",
+            botName: "Phone Subscription Bot",
+            botAvatar: "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
+            fabImage: "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
+            themeMode: "light",
+            fontFamily: "inter",
+            radius: 1,
+            feedbackEnabled: true,
+            headerVariant: "solid",
+            variant: "soft",
+            footer: "[⚡ by Botpress](https://botpress.com/?from=webchat)"
+          }
         });
-      });
-    });
-    
-    // Botpress initialization
-    window.botpress.on("webchat:ready", () => {
-      window.botpress.open();
-    });
-    window.botpress.init({
-      "botId": "1e36c7f3-4bae-4541-8472-0b34f7b062f5",
-      "configuration": {
-        "version": "v1",
-        "composerPlaceholder": "Press to start...",
-        "botName": "Phone Subscription Bot",
-        "botAvatar": "https://files.bpcontent.cloud/2025/07/08/07/20250708074252-G9XGH3DQ.jpeg",
-        "botDescription": "Enquiries for phone subscriptions",
-        "fabImage": "https://files.bpcontent.cloud/2025/07/08/07/20250708074226-L1S088U0.jpeg",
-        "website": {},
-        "email": {},
-        "phone": {},
-        "termsOfService": {},
-        "privacyPolicy": {},
-        "color": "#347cc4",
-        "variant": "soft",
-        "headerVariant": "solid",
-        "themeMode": "light",
-        "fontFamily": "inter",
-        "radius": 1,
-        "feedbackEnabled": true,
-        "footer": "[⚡ by Botpress](https://botpress.com/?from=webchat)"
-      },
-      "clientId": "2ff4a760-9e44-453b-8f26-3a9dcb810de9",
-      "selector": "#webchat"
-    });
-    
-  </script>
+
+      } else if (attempt >= MAX_ATTEMPTS) {
+        clearInterval(checkBotpress);
+        console.error('[Botpress] Failed to initialize after 20 attempts. Is the script loaded correctly?');
+      }
+    }, 300);
+  });
+</script>
 </body>
 </html>
