@@ -23,13 +23,86 @@
       color: #333;
       min-height: 100vh;
     }
+
+    /* Navbar Styles */
+    .navbar {
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2d3748;
+      text-decoration: none;
+    }
+    .nav-logo:hover {
+      color: #5eb1ef;
+    }
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 32px;
+    }
+    .nav-item {
+      position: relative;
+    }
+    .nav-link {
+      text-decoration: none;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    .nav-link:hover {
+      color: #5eb1ef;
+      background: #f0f8ff;
+    }
+    .nav-link.active {
+      color: #5eb1ef;
+      background: #f0f8ff;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-menu-btn span {
+      width: 24px;
+      height: 3px;
+      background: #4a5568;
+      margin: 3px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+
     .container {
       max-width: 900px;
       margin: 0 auto;
       padding: 20px;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      min-height: calc(100vh - 64px);
     }
     header {
       text-align: center;
@@ -126,15 +199,75 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.5; }
     }
+
+    /* Mobile Responsive */
     @media (max-width: 768px) {
-      .container { padding: 15px; }
-      h1 { font-size: 1.8rem; }
-      iframe#botpress-iframe { height: 500px; }
+      .nav-menu {
+        display: none;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        gap: 8px;
+      }
+      .nav-menu.active {
+        display: flex;
+      }
+      .mobile-menu-btn {
+        display: flex;
+      }
+      .container { 
+        padding: 15px; 
+      }
+      h1 { 
+        font-size: 1.8rem; 
+      }
+      iframe#botpress-iframe { 
+        height: 500px; 
+      }
     }
   </style>
 </head>
 
 <body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        📱 Phone Subscription
+      </a>
+      
+      <ul class="nav-menu" id="nav-menu">
+        <li class="nav-item">
+          <a href="#personal-care" class="nav-link">Personal Care & Shopping</a>
+        </li>
+        <li class="nav-item">
+          <a href="#entertainment" class="nav-link">Entertainment</a>
+        </li>
+        <li class="nav-item">
+          <a href="#food" class="nav-link">Food</a>
+        </li>
+        <li class="nav-item">
+          <a href="#transport" class="nav-link">Transport</a>
+        </li>
+        <li class="nav-item">
+          <a href="#chat" class="nav-link active">AI Assistant</a>
+        </li>
+      </ul>
+
+      <!-- Mobile Menu Button -->
+      <div class="mobile-menu-btn" id="mobile-menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
   <div class="container">
     <header>
       <div class="logo">
@@ -152,7 +285,7 @@
         <p>Your intelligent phone plan assistant that helps you find the best deals and budgeting options tailored to your needs.</p>
       </div>
 
-      <div class="chatbot-section">
+      <div class="chatbot-section" id="chat">
         <div class="chatbot-header">
           <div class="status-indicator">
             <div class="status-dot"></div>
@@ -171,5 +304,27 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      const navMenu = document.getElementById('nav-menu');
+      navMenu.classList.toggle('active');
+    });
+
+    // Active link highlighting
+    document.addEventListener('DOMContentLoaded', function() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('[id]');
+
+      // Set active link based on current page section
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
 </body>
 </html>
